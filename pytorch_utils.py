@@ -3,6 +3,8 @@ import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 
+
+IMG_SZ = 256
 USE_GPU = False
 
 dtype = torch.float32 # we will be using float throughout this tutorial
@@ -70,15 +72,15 @@ def train(model, optimizer, loader_train, loader_val, epochs=1):
             optimizer.step()
 
             # if t % print_every == 0:
-            print('Iteration %d, loss = %.4f' % (t, loss.item()))
-                # check_accuracy_part34(loader_val, model)
-                # print()
+            #     print('Iteration %d, loss = %.4f' % (t, loss.item()))
+            #     check_accuracy(loader_val, model)
+            #     print()
 
-# def check_accuracy_part34(testloader, model):
+# def check_accuracy(testloader, model):
 #     correct = 0
 #     total = 0
 #     with torch.no_grad():
-#         for data in testloader:
+#         for x,y in testloader:
 #             images, labels = data
 #             outputs = model(images)
 #             _, predicted = torch.max(outputs.data, 1)
@@ -86,6 +88,25 @@ def train(model, optimizer, loader_train, loader_val, epochs=1):
 #             correct += (predicted == labels).sum().item()
 #     accuracy = 100 * correct / total
 #     print('Accuracy of the network on the val images: %d %%' % accuracy)
+
+
+# Convolutional layer with channel_1 5x5 filters with zero-padding of 2
+# ReLU
+# Fully-connected layer to num_classes classes
+class TwoLayerConvNet(nn.Module):
+    def __init__(self, in_channel, channel_1, num_classes, filter_size, zero_padding):
+        super().__init__()
+        self.conv_w1 = nn.Conv2d(in_channel, channel_1, filter_size, 1, (zero_padding,zero_padding))
+        nn.init.kaiming_normal_(self.conv_w1.weight)
+        self.fc1 = nn.Linear(channel_1*IMG_SZ*IMG_SZ, num_classes)
+        nn.init.kaiming_normal_(self.fc1.weight)
+
+    def forward(self, x):
+        scores = None
+        x = F.relu(self.conv_w1(x))
+        x = flatten(x)
+        scores = self.fc1(x)
+        return scores
 
 class TwoLayerFC(nn.Module):
     def __init__(self, input_size, hidden_size, num_classes):

@@ -8,6 +8,7 @@ import torch.utils.data as DataLoader
 from torch.utils.data.sampler import SubsetRandomSampler
 import numpy as np
 
+IMG_SZ = 256
 
 # Takes a range of classes and compresses them from 0 to num_classes - 1. Disregards any
 # extra classes.
@@ -36,6 +37,7 @@ def loadData(X, Y, num_train, N, batch_size):
     Y_train = Y[:num_train]
     X_val = X[num_train:]
     Y_val = Y[num_train:]
+    print(num_train, N)
     train = DataLoader.TensorDataset(torch.from_numpy(X_train), torch.from_numpy(Y_train))
     loader_train = DataLoader.DataLoader(dataset=train,
         batch_size = batch_size,
@@ -46,11 +48,12 @@ def loadData(X, Y, num_train, N, batch_size):
                                sampler=SubsetRandomSampler(range(num_train, N)))
     return loader_train, loader_val
 
-def runFC():
-    return pytorch_utils.TwoLayerFC(3 * 256 * 256, hidden_layer_size, num_classes)
+def runFC(hidden_layer_size, num_classes):
+    return pytorch_utils.TwoLayerFC(3 * IMG_SZ * IMG_SZ, hidden_layer_size, num_classes)
 
-# def runTwoLayerCNN():
-    # return pytorch_utils.TwoLayerFC(3 * 256 * 256, hidden_layer_size, num_classes)
+def runTwoLayerCNN(num_classes):
+    num_channels = 10
+    return pytorch_utils.TwoLayerConvNet(3, num_channels, num_classes, 5, 2)
 
 def main():
     batch_size = 64
@@ -64,10 +67,14 @@ def main():
     Y = Y.astype(int)
     N = X.shape[0]
     num_train = int(N * training_portion)
+    X = np.reshape(X, (N, 3, 256, 256))
 
     X, Y = convertLabelsToClasses(X, Y, N, num_classes)
     loader_train, loader_val = loadData(X, Y, num_train, N, batch_size)
-    model = runFC(hidden_layer_size, num_classes)
+    
+    # change this line to try out different models
+    model = runTwoLayerCNN(num_classes)
+    
     optimizer = optim.SGD(model.parameters(), lr=learning_rate)
     pytorch_utils.train(model, optimizer, loader_train, loader_val)
 
