@@ -9,7 +9,8 @@ from torch.utils.data.sampler import SubsetRandomSampler
 import numpy as np
 
 
-# Takes a range of classes and compressed them from 0 to num_classes - 1
+# Takes a range of classes and compresses them from 0 to num_classes - 1. Disregards any
+# extra classes.
 def convertLabelsToClasses(X, Y, N, num_classes):
     new_X = []
     new_Y = []
