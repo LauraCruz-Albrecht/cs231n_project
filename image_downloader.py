@@ -72,6 +72,8 @@ def Run():
   key_url_list = ParseData(data_file)
   pool = multiprocessing.Pool(processes=50)
   pool.map(DownloadImage, key_url_list)
+  print(type(pool))
+  print(pool.shape)
 
 
 if __name__ == '__main__':
