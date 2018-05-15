@@ -45,6 +45,11 @@ def loadData(X, Y, num_train, N, batch_size):
                                sampler=SubsetRandomSampler(range(num_train, N)))
     return loader_train, loader_val
 
+def runFC():
+    return pytorch_utils.TwoLayerFC(3 * 256 * 256, hidden_layer_size, num_classes)
+
+# def runTwoLayerCNN():
+    # return pytorch_utils.TwoLayerFC(3 * 256 * 256, hidden_layer_size, num_classes)
 
 def main():
     batch_size = 64
@@ -61,7 +66,7 @@ def main():
 
     X, Y = convertLabelsToClasses(X, Y, N, num_classes)
     loader_train, loader_val = loadData(X, Y, num_train, N, batch_size)
-    model = pytorch_utils.TwoLayerFC(3 * 256 * 256, hidden_layer_size, num_classes)
+    model = runFC(hidden_layer_size, num_classes)
     optimizer = optim.SGD(model.parameters(), lr=learning_rate)
     pytorch_utils.train(model, optimizer, loader_train, loader_val)
 

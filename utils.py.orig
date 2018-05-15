@@ -1,0 +1,88 @@
+import csv
+import numpy as np
+import pandas as pd
+<<<<<<< HEAD
+import os, sys
+=======
+from past.builtins import xrange
+import os, sys
+from IPython.display import display
+from IPython.display import Image as _Imgdis
+>>>>>>> bc13ef99753fd77f7e1e31c2f7ab3e1b3db23a7f
+from PIL import Image
+import numpy as np
+from time import time
+from time import sleep
+from scipy import ndimage
+from matplotlib import pyplot as plt
+from skimage import data, color
+from skimage.transform import rescale, resize, downscale_local_mean
+import scipy
+import pickle
+import gzip
+
+# global variables
+<<<<<<< HEAD
+IMG_SZ = 576    # width, height of resized image square
+=======
+IMG_SZ = 256    # width, height of resized image square
+>>>>>>> bc13ef99753fd77f7e1e31c2f7ab3e1b3db23a7f
+
+def load_image(infilename):
+    '''
+    opens image at provided path, returns numpy array 
+    https://stackoverflow.com/questions/7762948/how-to-convert-an-rgb-image-to-numpy-array
+    '''
+    img = Image.open(infilename)
+    img.load()
+    data = np.asarray( img, dtype="int32" )
+    return data
+
+def crop_image(img_arr):
+    '''
+    takes in np array of image
+    returns largest centered square, also as np array
+    '''
+    h, w, _ = img_arr.shape
+    
+    if w > h:
+        offset = (w - h) // 2
+        return img_arr[:, offset : h + offset, :]
+    elif h > w:
+        offset = (h - w) // 2
+        return img_arr[offset : w + offset, :]
+
+    # h == w
+    return img_arr
+
+def load_data(src_folder):
+    X, Y = [], []
+
+    src_files = [f for f in os.listdir(src_folder) if os.path.isfile(os.path.join(src_folder, f)) and f != '.DS_Store']
+
+    N = len(src_files)
+
+    for i in range(N):
+        _file = src_files[i]
+        x = load_image(src_folder + '/' + _file)  # numpy array [IMG_SZ x IMG_SZ x 3]
+        y = _file[_file.index('_') + 1 : _file.index('.')]  # filename format: [id_label.jpg]
+        
+        X.append(x)
+        Y.append(y)
+
+        if i % 100 == 0: print ('i', i)
+
+    X = np.array(X)
+    Y = np.array(Y)
+    return X, Y
+
+
+# to demonstrate loading data
+def main():
+    src_folder = 'mini_data/compressed_576_s'
+    X, Y = load_data(src_folder)
+    print (X.shape, Y.shape)
+
+if __name__ == '__main__':
+  main()
+
