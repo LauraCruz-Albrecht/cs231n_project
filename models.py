@@ -61,19 +61,23 @@ def main():
     hidden_layer_size = 1000
     learning_rate = 1e-2
     training_portion = 0.8
-
+    
     X, Y = utils.load_data('mini_data/compressed_256')
     X = X.astype(int)
     Y = Y.astype(int)
     N = X.shape[0]
     num_train = int(N * training_portion)
-    X = np.reshape(X, (N, 3, 256, 256))
+
+    # previously, X is: N x 256 x 256 x 3 ; make channels second
+    X = np.transpose(X, (0, 3, 1, 2))  # N x 3 x 256 x 256
 
     X, Y = convertLabelsToClasses(X, Y, N, num_classes)
+
     loader_train, loader_val = loadData(X, Y, num_train, N, batch_size)
     
     # change this line to try out different models
     model = runTwoLayerCNN(num_classes)
+    #model = runFC(hidden_layer_size, num_classes)
     
     optimizer = optim.SGD(model.parameters(), lr=learning_rate)
     pytorch_utils.train(model, optimizer, loader_train, loader_val)
