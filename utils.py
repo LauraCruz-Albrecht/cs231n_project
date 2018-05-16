@@ -45,10 +45,9 @@ def load_data(src_folder):
     if N > 50000:
         N = 50000
 
-    X, Y = [], []
-    #np.empty([N, IMG_SZ, IMG_SZ, 3]), np.empty([N])
+    X, Y = np.empty([N, IMG_SZ, IMG_SZ, 3]), np.empty([N])
 
-
+    position = 0
     for i in range(N):
         _file = src_files[i]
         x = load_image(src_folder + '/' + _file)  # numpy array [IMG_SZ x IMG_SZ x 3]
@@ -56,13 +55,14 @@ def load_data(src_folder):
         
         if int(y) >= 100: continue
 
-        X.append(x)
-        Y.append(y)
+        X[position] = x
+        Y[position] = y
+        position = position + 1
 
         if i % (1000) == 0: print ('i', i)
         
-    X = np.array(X)
-    Y = np.array(Y)
+    X = X[:position]
+    Y = Y[:position]
     return X, Y
 
 

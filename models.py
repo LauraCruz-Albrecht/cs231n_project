@@ -67,8 +67,8 @@ def main():
 
     directory = sys.argv[1]
     X, Y = utils.load_data(directory)
-    X = X.astype(int)
-    Y = Y.astype(int)
+    # X = X.astype(int)
+    # Y = Y.astype(int)
     N = X.shape[0]
 
     # previously, X is: N x 256 x 256 x 3 ; make channels second
