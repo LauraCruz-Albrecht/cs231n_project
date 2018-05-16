@@ -52,7 +52,7 @@ def load_data(src_folder):
         X.append(x)
         Y.append(y)
 
-        if i % (N / 10) == 0: print ('i', i)
+        if i % (1000) == 0: print ('i', i)
         
         # can't do over 50k files because of google cloud restrictions
         if i == 50000:
