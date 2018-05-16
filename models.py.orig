@@ -58,19 +58,31 @@ def main():
     hidden_layer_size = 1000
     learning_rate = 1e-2
     training_portion = 0.8
+<<<<<<< HEAD
     num_epochs = 10
 
+=======
+    
+>>>>>>> a0c34aa2fe6937b3e0c5bf1b03c85a45a6b1c8cd
     X, Y = utils.load_data('mini_data/compressed_256')
     X = X.astype(int)
     Y = Y.astype(int)
     N = X.shape[0]
+<<<<<<< HEAD
+    X = np.reshape(X, (N, 3, 256, 256))
 
-    # previously, X is: N x 256 x 256 x 3 ; make channels second
-    X = np.transpose(X, (0, 3, 1, 2))  # N x 3 x 256 x 256
     X, Y, num_classes = convertLabelsToClasses(X, Y, N, num_classes)
     N = X.shape[0] # need this line because X may have changed in size
     num_train = int(N * training_portion)
+=======
+    num_train = int(N * training_portion)
 
+    # previously, X is: N x 256 x 256 x 3 ; make channels second
+    X = np.transpose(X, (0, 3, 1, 2))  # N x 3 x 256 x 256
+
+    X, Y = convertLabelsToClasses(X, Y, N, num_classes)
+
+>>>>>>> a0c34aa2fe6937b3e0c5bf1b03c85a45a6b1c8cd
     loader_train, loader_val = loadData(X, Y, num_train, N, batch_size)
     
     print("Num classes is ", num_classes)
@@ -78,8 +90,13 @@ def main():
     print("Num samples in val is ", N - num_train)
 
     # change this line to try out different models
+<<<<<<< HEAD
+    # model = runTwoLayerCNN(num_classes)
+    model = runFC(hidden_layer_size, num_classes)
+=======
     model = runTwoLayerCNN(num_classes)
-    # model = runFC(hidden_layer_size, num_classes)
+    #model = runFC(hidden_layer_size, num_classes)
+>>>>>>> a0c34aa2fe6937b3e0c5bf1b03c85a45a6b1c8cd
     
     optimizer = optim.SGD(model.parameters(), lr=learning_rate)
     pytorch_utils.train(model, optimizer, loader_train, loader_val, num_epochs)
