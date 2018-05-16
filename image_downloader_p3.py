@@ -44,13 +44,14 @@ def parse_data(data_file):
     csvreader = csv.reader(csvfile)
     #key_url_list = [line[:2] for line in csvreader]
     key_url_list = [line for line in csvreader]
-    return key_url_list[1:]  # Chop off header
+    #return key_url_list[1:]  # Chop off header
+    return key_url_list
 
 
 def download_image(key_url):
     out_dir = sys.argv[2]
-    (key, url, label) = key_url
-    filename = os.path.join(out_dir, '{}_{}.jpg'.format(key, label))
+    (key, url, orig_label, new_label) = key_url
+    filename = os.path.join(out_dir, '{}_{}.jpg'.format(key, new_label))
 
     if os.path.exists(filename):
         print('Image {} already exists. Skipping download.'.format(filename))
