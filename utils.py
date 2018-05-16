@@ -6,12 +6,6 @@ from PIL import Image
 import numpy as np
 from time import time
 from time import sleep
-from scipy import ndimage
-from skimage import data, color
-from skimage.transform import rescale, resize, downscale_local_mean
-import scipy
-import pickle
-import gzip
 
 # global variables
 IMG_SZ = 576    # width, height of resized image square
