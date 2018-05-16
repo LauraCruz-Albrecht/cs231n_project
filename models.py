@@ -79,14 +79,6 @@ def main():
     print("Num classes is ", num_classes)
     print("Num samples being cosidered in training is ", num_train)
     print("Num samples in val is ", N - num_train)
-
-    model = None
-    if sys.argv[2] == "2cnn":
-        model = runTwoLayerCNN(num_classes)
-        print("Running two layer CNN")
-    else:
-        model = runFC(hidden_layer_size, num_classes)
-        print("Running fully connected layer")
     
     # if the user specifies what learning rate to use, then we only consider that one
     # and increase the number of epochs for it
@@ -97,6 +89,13 @@ def main():
     best_acc = 0
     best_learning_rate = None
     for learning_rate in learning_rates:
+        model = None
+        if sys.argv[2] == "2cnn":
+            model = runTwoLayerCNN(num_classes)
+            print("Running two layer CNN")
+        else:
+            model = runFC(hidden_layer_size, num_classes)
+            print("Running fully connected layer")
         print("Testing out learning rate: ", learning_rate)
         optimizer = optim.SGD(model.parameters(), lr=learning_rate)
         acc = pytorch_utils.train(model, optimizer, loader_train, loader_val, num_epochs)
