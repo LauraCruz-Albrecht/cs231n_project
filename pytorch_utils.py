@@ -14,9 +14,6 @@ if USE_GPU and torch.cuda.is_available():
 else:
     device = torch.device('cpu')
 
-# Constant to control how frequently we print train loss
-print_every = 5
-
 print('using device:', device)
 
 
@@ -51,7 +48,9 @@ def train(model, optimizer, loader_train, loader_val, epochs=1):
     """
     model = model.to(device=device)  # move the model parameters to CPU/GPU
     for e in range(epochs):
-        print(len(loader_train))
+        num_iters = len(loader_train)
+        want_print = 5
+        print_every = num_iters / want_print
         for t, (x, y) in enumerate(loader_train):
             model.train()  # put model to training mode
             x = x.to(device=device, dtype=dtype)  # move to device, e.g. GPU

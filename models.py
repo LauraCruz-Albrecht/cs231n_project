@@ -58,7 +58,7 @@ def runTwoLayerCNN(num_classes):
 # model-to-run can be 2cnn, fc, or none
 # learning-rate is optional: if it is not given, then we test out many different learning rates with a low epoch
 def main():
-    batch_size = 64
+    batch_size = 200
     num_classes = 500
     hidden_layer_size = 1000
     learning_rates = [1e-4, 1e-3, 1e-2, 1e-1, 1, 10, 100]
