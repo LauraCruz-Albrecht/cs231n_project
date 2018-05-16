@@ -41,8 +41,9 @@ def load_data(src_folder):
     src_files = [f for f in os.listdir(src_folder) if os.path.isfile(os.path.join(src_folder, f)) and f != '.DS_Store']
 
     N = len(src_files)
-    # can't do over 50k files because of google cloud restrictions
-    N = 50000
+    # can't do over 50k files because of google cloud memory restrictions
+    if N > 50000:
+        N = 50000
 
     X, Y = np.empty([N, IMG_SZ, IMG_SZ, 3]), np.empty([N])
 
@@ -57,7 +58,6 @@ def load_data(src_folder):
 
         if i % (1000) == 0: print ('i', i)
         
-
     return X, Y
 
 

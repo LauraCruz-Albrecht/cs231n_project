@@ -67,13 +67,13 @@ def main():
 
     directory = sys.argv[1]
     X, Y = utils.load_data(directory)
-    X = X.astype(int)
-    Y = Y.astype(int)
+    # X = X.astype(int)
+    # Y = Y.astype(int)
     N = X.shape[0]
 
     # previously, X is: N x 256 x 256 x 3 ; make channels second
     X = np.transpose(X, (0, 3, 1, 2))  # N x 3 x 256 x 256
-    X, Y, num_classes = convertLabelsToClasses(X, Y, N, num_classes)
+    # X, Y, num_classes = convertLabelsToClasses(X, Y, N, num_classes)
     N = X.shape[0] # need this line because X may have changed in size
     num_train = int(N * training_portion)
 
