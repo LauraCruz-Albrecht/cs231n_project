@@ -71,6 +71,7 @@ def train(model, optimizer, loader_train, loader_val, epochs=1):
             # computed by the backwards pass.
             optimizer.step()
 
+            print t
             if t % print_every == 0:
                 print('Iteration %d, loss = %.4f' % (t, loss.item()))
                 check_accuracy(loader_val, model)
