@@ -60,7 +60,7 @@ def main():
     training_portion = 0.8
     num_epochs = 10
 
-    X, Y = utils.load_data('../train')
+    X, Y = utils.load_data('reduced_data/train')
     X = X.astype(int)
     Y = Y.astype(int)
     N = X.shape[0]
