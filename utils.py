@@ -53,6 +53,10 @@ def load_data(src_folder):
         Y.append(y)
 
         if i % (N / 10) == 0: print ('i', i)
+        
+        # can't do over 50k files because of google cloud restrictions
+        if i == 50000:
+            break
 
     X = np.array(X)
     Y = np.array(Y)
