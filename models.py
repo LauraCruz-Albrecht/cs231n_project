@@ -7,6 +7,7 @@ import torch.optim as optim
 import torch.utils.data as DataLoader
 from torch.utils.data.sampler import SubsetRandomSampler
 import numpy as np
+import sys
 
 IMG_SZ = 256
 
@@ -60,7 +61,8 @@ def main():
     training_portion = 0.8
     num_epochs = 10
 
-    X, Y = utils.load_data('../train')
+    directory = sys.argv[1]
+    X, Y = utils.load_data(directory)
     X = X.astype(int)
     Y = Y.astype(int)
     N = X.shape[0]
@@ -77,9 +79,13 @@ def main():
     print("Num samples being cosidered in training is ", num_train)
     print("Num samples in val is ", N - num_train)
 
-    # change this line to try out different models
-    model = runTwoLayerCNN(num_classes)
-    # model = runFC(hidden_layer_size, num_classes)
+    model = None
+    if sys.argv[2] == "2cnn":
+        model = runTwoLayerCNN(num_classes)
+        print("Running two layer CNN")
+    else:
+        model = runFC(hidden_layer_size, num_classes)
+        print("Running fully connected layer")
     
     optimizer = optim.SGD(model.parameters(), lr=learning_rate)
     pytorch_utils.train(model, optimizer, loader_train, loader_val, num_epochs)
