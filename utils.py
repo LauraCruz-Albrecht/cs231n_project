@@ -52,7 +52,7 @@ def load_data(src_folder):
         X.append(x)
         Y.append(y)
 
-        if i % 100 == 0: print ('i', i)
+        if i % (N / 10) == 0: print ('i', i)
 
     X = np.array(X)
     Y = np.array(Y)
