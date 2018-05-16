@@ -101,7 +101,7 @@ def check_accuracy(loader, model):
 # Fully-connected layer to num_classes classes
 class TwoLayerConvNet(nn.Module):
     def __init__(self, in_channel, channel_1, num_classes, filter_size, zero_padding):
-        super().__init__()
+        super(TwoLayerConvNet, self).__init__()
         self.conv_w1 = nn.Conv2d(in_channel, channel_1, filter_size, 1, (zero_padding,zero_padding))
         nn.init.kaiming_normal_(self.conv_w1.weight)
         self.fc1 = nn.Linear(channel_1*IMG_SZ*IMG_SZ, num_classes)
@@ -116,7 +116,7 @@ class TwoLayerConvNet(nn.Module):
 
 class TwoLayerFC(nn.Module):
     def __init__(self, input_size, hidden_size, num_classes):
-        super().__init__()
+        super(TwoLayerFC, self).__init__()
         # assign layer objects to class attributes
         self.fc1 = nn.Linear(input_size, hidden_size)
         # nn.init package contains convenient initialization methods
