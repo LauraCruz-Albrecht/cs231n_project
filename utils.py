@@ -7,7 +7,6 @@ import numpy as np
 from time import time
 from time import sleep
 from scipy import ndimage
-from matplotlib import pyplot as plt
 from skimage import data, color
 from skimage.transform import rescale, resize, downscale_local_mean
 import scipy
