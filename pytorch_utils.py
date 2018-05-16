@@ -49,7 +49,7 @@ def train(model, optimizer, loader_train, loader_val, epochs=1):
     model = model.to(device=device)  # move the model parameters to CPU/GPU
     for e in range(epochs):
         num_iters = len(loader_train)
-        want_print = 5
+        want_print = 4
         print_every = num_iters / want_print
         for t, (x, y) in enumerate(loader_train):
             model.train()  # put model to training mode

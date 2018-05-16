@@ -61,7 +61,7 @@ def main():
     batch_size = 200
     num_classes = 500
     hidden_layer_size = 1000
-    learning_rates = [1e-4, 1e-3, 1e-2, 1e-1, 1, 10, 100]
+    learning_rates = [1e-3, 1e-2, 1e-1, 1, 10, 100]
     training_portion = 0.8
     num_epochs = 1
 
