@@ -15,7 +15,7 @@ else:
     device = torch.device('cpu')
 
 # Constant to control how frequently we print train loss
-print_every = 100
+print_every = 5
 
 print('using device:', device)
 
@@ -71,23 +71,29 @@ def train(model, optimizer, loader_train, loader_val, epochs=1):
             # computed by the backwards pass.
             optimizer.step()
 
-            # if t % print_every == 0:
-            #     print('Iteration %d, loss = %.4f' % (t, loss.item()))
-            #     check_accuracy(loader_val, model)
-            #     print()
+            if t % print_every == 0:
+                print('Iteration %d, loss = %.4f' % (t, loss.item()))
+                check_accuracy(loader_val, model)
+                print()
 
-# def check_accuracy(testloader, model):
-#     correct = 0
-#     total = 0
-#     with torch.no_grad():
-#         for x,y in testloader:
-#             images, labels = data
-#             outputs = model(images)
-#             _, predicted = torch.max(outputs.data, 1)
-#             total += labels.size(0)
-#             correct += (predicted == labels).sum().item()
-#     accuracy = 100 * correct / total
-#     print('Accuracy of the network on the val images: %d %%' % accuracy)
+def check_accuracy(loader, model):
+    # if loader.dataset.train:
+    #     print('Checking accuracy on validation set')
+    # else:
+    #     print('Checking accuracy on test set')   
+    num_correct = 0
+    num_samples = 0
+    model.eval()  # set model to evaluation mode
+    with torch.no_grad():
+        for t, (x, y)in enumerate(loader):
+            x = x.to(device=device, dtype=dtype)  # move to device, e.g. GPU
+            y = y.to(device=device, dtype=torch.long)
+            scores = model(x)
+            _, preds = scores.max(1)
+            num_correct += (preds == y).sum()
+            num_samples += preds.size(0)
+        acc = float(num_correct) / num_samples
+        print('Got %d / %d correct (%.2f)' % (num_correct, num_samples, 100 * acc))
 
 
 # Convolutional layer with channel_1 5x5 filters with zero-padding of 2

@@ -29,7 +29,7 @@ def convertLabelsToClasses(X, Y, N, num_classes):
                 class_num = class_num + 1
     if class_num < num_classes:
         num_classes = class_num
-    return np.array(new_X), np.array(new_Y)
+    return np.array(new_X), np.array(new_Y), num_classes
 
 
 def loadData(X, Y, num_train, N, batch_size):
@@ -37,15 +37,12 @@ def loadData(X, Y, num_train, N, batch_size):
     Y_train = Y[:num_train]
     X_val = X[num_train:]
     Y_val = Y[num_train:]
-    print(num_train, N)
     train = DataLoader.TensorDataset(torch.from_numpy(X_train), torch.from_numpy(Y_train))
     loader_train = DataLoader.DataLoader(dataset=train,
-        batch_size = batch_size,
-        sampler=SubsetRandomSampler(range(num_train)))
+        batch_size = batch_size)
     val = DataLoader.TensorDataset(torch.from_numpy(X_val), torch.from_numpy(Y_val))
     loader_val = DataLoader.DataLoader(dataset=val,
-                               batch_size = batch_size,
-                               sampler=SubsetRandomSampler(range(num_train, N)))
+                               batch_size = batch_size)
     return loader_train, loader_val
 
 def runFC(hidden_layer_size, num_classes):
@@ -61,22 +58,29 @@ def main():
     hidden_layer_size = 1000
     learning_rate = 1e-2
     training_portion = 0.8
+    num_epochs = 10
 
     X, Y = utils.load_data('mini_data/compressed_256')
     X = X.astype(int)
     Y = Y.astype(int)
     N = X.shape[0]
-    num_train = int(N * training_portion)
     X = np.reshape(X, (N, 3, 256, 256))
 
-    X, Y = convertLabelsToClasses(X, Y, N, num_classes)
+    X, Y, num_classes = convertLabelsToClasses(X, Y, N, num_classes)
+    N = X.shape[0] # need this line because X may have changed in size
+    num_train = int(N * training_portion)
     loader_train, loader_val = loadData(X, Y, num_train, N, batch_size)
     
+    print("Num classes is ", num_classes)
+    print("Num samples being cosidered in training is ", num_train)
+    print("Num samples in val is ", N - num_train)
+
     # change this line to try out different models
-    model = runTwoLayerCNN(num_classes)
+    # model = runTwoLayerCNN(num_classes)
+    model = runFC(hidden_layer_size, num_classes)
     
     optimizer = optim.SGD(model.parameters(), lr=learning_rate)
-    pytorch_utils.train(model, optimizer, loader_train, loader_val)
+    pytorch_utils.train(model, optimizer, loader_train, loader_val, num_epochs)
 
 if __name__ == '__main__':
   main()
