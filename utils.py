@@ -53,6 +53,8 @@ def load_data(src_folder):
         x = load_image(src_folder + '/' + _file)  # numpy array [IMG_SZ x IMG_SZ x 3]
         y = _file[_file.index('_') + 1 : _file.index('.')]  # filename format: [id_label.jpg]
         
+        if int(y) >= 100: continue
+
         X[i] = x
         Y[i] = y
 
