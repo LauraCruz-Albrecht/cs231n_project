@@ -63,7 +63,7 @@ def main():
     hidden_layer_size = 1000
     learning_rates = [1e-4, 1e-3, 1e-2, 1e-1, 1, 10, 100]
     training_portion = 0.8
-    num_epochs = 5
+    num_epochs = 1
 
     directory = sys.argv[1]
     X, Y = utils.load_data(directory)
@@ -84,12 +84,9 @@ def main():
     if sys.argv[2] == "2cnn":
         model = runTwoLayerCNN(num_classes)
         print("Running two layer CNN")
-    if sys.argv[2] == "fc":
+    else:
         model = runFC(hidden_layer_size, num_classes)
         print("Running fully connected layer")
-    # if sys.argv[2] == "both":
-    #     model = runTwoLayerCNN(num_classes)
-    #     print("Running two layer CNN")
     
     # if the user specifies what learning rate to use, then we only consider that one
     # and increase the number of epochs for it
