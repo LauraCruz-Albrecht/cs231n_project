@@ -59,16 +59,13 @@ def runTwoLayerCNN(num_classes):
 # learning-rate is optional: if it is not given, then we test out many different learning rates with a low epoch
 def main():
     batch_size = 200
-    num_classes = 100
-    hidden_layer_size = 5000
-    learning_rates = [1e-3, 1e-2, 1e-1, 1, 10, 100]
+    hidden_layer_size = 10000
+    learning_rates = [1, 10, 100]
     training_portion = 0.8
-    num_epochs = 1
+    num_epochs = 5
 
     directory = sys.argv[1]
     X, Y = utils.load_data(directory)
-    # X = X.astype(int)
-    # Y = Y.astype(int)
     N = X.shape[0]
 
     # previously, X is: N x 256 x 256 x 3 ; make channels second
@@ -81,7 +78,9 @@ def main():
     print("Num classes is ", num_classes)
     print("Num samples being cosidered in training is ", num_train)
     print("Num samples in val is ", N - num_train)
-    
+    print("hidden_layer_size is ", hidden_layer_size)
+    print("batch_size is ", batch_size)
+
     # if the user specifies what learning rate to use, then we only consider that one
     # and increase the number of epochs for it
     if len(sys.argv) == 4:
@@ -90,6 +89,7 @@ def main():
 
     best_acc = 0
     best_learning_rate = None
+    best_model = None
     for learning_rate in learning_rates:
         model = None
         if sys.argv[2] == "2cnn":
@@ -105,7 +105,12 @@ def main():
         if acc > best_acc:
             best_acc = acc
             best_learning_rate = learning_rate
+            best_model = model
     print("Best accuracy and learning rates are: ", best_acc, best_learning_rate)
+    print("Running the best model for 10 more epochs")
+    optimizer = optim.SGD(best_model.parameters(), lr=best_learning_rate)
+    acc = pytorch_utils.train(best_model, optimizer, loader_train, loader_val, 10)
+    print("Final accuracy is ", acc)
 
 if __name__ == '__main__':
   main()

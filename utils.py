@@ -40,15 +40,15 @@ def crop_image(img_arr):
 def load_data(src_folder):
     src_files = [f for f in os.listdir(src_folder) if os.path.isfile(os.path.join(src_folder, f)) and f != '.DS_Store']
 
-    N = len(src_files)
     # can't do over 50k files because of google cloud memory restrictions
-    if N > 50000:
-        N = 50000
+    estimated_N = len(src_files)
+    if len(src_files) > 50000:
+        estimated_N = 20000
 
-    X, Y = np.empty([N, IMG_SZ, IMG_SZ, 3]), np.empty([N])
+    X, Y = np.empty([estimated_N, IMG_SZ, IMG_SZ, 3]), np.empty([estimated_N])
 
     position = 0
-    for i in range(N):
+    for i in range(len(src_files)):
         _file = src_files[i]
         x = load_image(src_folder + '/' + _file)  # numpy array [IMG_SZ x IMG_SZ x 3]
         y = _file[_file.index('_') + 1 : _file.index('.')]  # filename format: [id_label.jpg]
