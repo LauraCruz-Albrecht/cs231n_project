@@ -7,6 +7,7 @@ import torch.optim as optim
 import torch.utils.data as DataLoader
 from torch.utils.data.sampler import SubsetRandomSampler
 import numpy as np
+import sys
 
 IMG_SZ = 256
 
@@ -58,45 +59,37 @@ def main():
     hidden_layer_size = 1000
     learning_rate = 1e-2
     training_portion = 0.8
-<<<<<<< HEAD
     num_epochs = 10
 
+<<<<<<< HEAD
+    X, Y = utils.load_data('reduced_data/train')
 =======
-    
->>>>>>> a0c34aa2fe6937b3e0c5bf1b03c85a45a6b1c8cd
-    X, Y = utils.load_data('mini_data/compressed_256')
+    directory = sys.argv[1]
+    X, Y = utils.load_data(directory)
+>>>>>>> 46f7dc7fa0286239c149860f0a18e53e8e7eb716
     X = X.astype(int)
     Y = Y.astype(int)
     N = X.shape[0]
-<<<<<<< HEAD
-    X = np.reshape(X, (N, 3, 256, 256))
-
-    X, Y, num_classes = convertLabelsToClasses(X, Y, N, num_classes)
-    N = X.shape[0] # need this line because X may have changed in size
-    num_train = int(N * training_portion)
-=======
-    num_train = int(N * training_portion)
 
     # previously, X is: N x 256 x 256 x 3 ; make channels second
     X = np.transpose(X, (0, 3, 1, 2))  # N x 3 x 256 x 256
+    # X, Y, num_classes = convertLabelsToClasses(X, Y, N, num_classes)
+    N = X.shape[0] # need this line because X may have changed in size
+    num_train = int(N * training_portion)
 
-    X, Y = convertLabelsToClasses(X, Y, N, num_classes)
-
->>>>>>> a0c34aa2fe6937b3e0c5bf1b03c85a45a6b1c8cd
     loader_train, loader_val = loadData(X, Y, num_train, N, batch_size)
     
     print("Num classes is ", num_classes)
     print("Num samples being cosidered in training is ", num_train)
     print("Num samples in val is ", N - num_train)
 
-    # change this line to try out different models
-<<<<<<< HEAD
-    # model = runTwoLayerCNN(num_classes)
-    model = runFC(hidden_layer_size, num_classes)
-=======
-    model = runTwoLayerCNN(num_classes)
-    #model = runFC(hidden_layer_size, num_classes)
->>>>>>> a0c34aa2fe6937b3e0c5bf1b03c85a45a6b1c8cd
+    model = None
+    if sys.argv[2] == "2cnn":
+        model = runTwoLayerCNN(num_classes)
+        print("Running two layer CNN")
+    else:
+        model = runFC(hidden_layer_size, num_classes)
+        print("Running fully connected layer")
     
     optimizer = optim.SGD(model.parameters(), lr=learning_rate)
     pytorch_utils.train(model, optimizer, loader_train, loader_val, num_epochs)
