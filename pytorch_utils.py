@@ -75,6 +75,7 @@ def train(model, optimizer, loader_train, loader_val, epochs=1):
                 print('Iteration %d, loss = %.4f' % (t, loss.item()))
                 check_accuracy(loader_val, model)
                 print()
+    return check_accuracy(loader_val, model)
 
 def check_accuracy(loader, model):
     # if loader.dataset.train:
@@ -94,6 +95,7 @@ def check_accuracy(loader, model):
             num_samples += preds.size(0)
         acc = float(num_correct) / num_samples
         print('Got %d / %d correct (%.2f)' % (num_correct, num_samples, 100 * acc))
+        return acc
 
 
 # Convolutional layer with channel_1 5x5 filters with zero-padding of 2

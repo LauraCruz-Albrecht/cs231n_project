@@ -8,7 +8,7 @@ from time import time
 from time import sleep
 
 # global variables
-IMG_SZ = 576    # width, height of resized image square
+IMG_SZ = 256    # width, height of resized image square
 
 def load_image(infilename):
     '''
@@ -38,19 +38,20 @@ def crop_image(img_arr):
     return img_arr
 
 def load_data(src_folder):
-    X, Y = [], []
-
     src_files = [f for f in os.listdir(src_folder) if os.path.isfile(os.path.join(src_folder, f)) and f != '.DS_Store']
 
     N = len(src_files)
+
+    X, Y = np.empty([N, IMG_SZ, IMG_SZ, 3]), np.empty([N])
+
 
     for i in range(N):
         _file = src_files[i]
         x = load_image(src_folder + '/' + _file)  # numpy array [IMG_SZ x IMG_SZ x 3]
         y = _file[_file.index('_') + 1 : _file.index('.')]  # filename format: [id_label.jpg]
         
-        X.append(x)
-        Y.append(y)
+        X[i] = x
+        Y[i] = y
 
         if i % (1000) == 0: print ('i', i)
         
@@ -58,8 +59,6 @@ def load_data(src_folder):
         # if i == 50000:
         #     break
 
-    X = np.array(X)
-    Y = np.array(Y)
     return X, Y
 
 

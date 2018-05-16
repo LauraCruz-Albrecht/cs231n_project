@@ -53,13 +53,17 @@ def runTwoLayerCNN(num_classes):
     num_channels = 10
     return pytorch_utils.TwoLayerConvNet(3, num_channels, num_classes, 5, 2)
 
+# way to run
+# python models.py directory-for-data model-to-run learning-rate
+# model-to-run can be 2cnn, fc, or none
+# learning-rate is optional: if it is not given, then we test out many different learning rates with a low epoch
 def main():
     batch_size = 64
     num_classes = 500
     hidden_layer_size = 1000
-    learning_rate = 1e-2
+    learning_rates = [1e-4, 1e-3, 1e-2, 1e-1, 1, 10, 100]
     training_portion = 0.8
-    num_epochs = 10
+    num_epochs = 5
 
     directory = sys.argv[1]
     X, Y = utils.load_data(directory)
@@ -69,7 +73,7 @@ def main():
 
     # previously, X is: N x 256 x 256 x 3 ; make channels second
     X = np.transpose(X, (0, 3, 1, 2))  # N x 3 x 256 x 256
-    # X, Y, num_classes = convertLabelsToClasses(X, Y, N, num_classes)
+    X, Y, num_classes = convertLabelsToClasses(X, Y, N, num_classes)
     N = X.shape[0] # need this line because X may have changed in size
     num_train = int(N * training_portion)
 
@@ -83,12 +87,30 @@ def main():
     if sys.argv[2] == "2cnn":
         model = runTwoLayerCNN(num_classes)
         print("Running two layer CNN")
-    else:
+    if sys.argv[2] == "fc":
         model = runFC(hidden_layer_size, num_classes)
         print("Running fully connected layer")
+    # if sys.argv[2] == "both":
+    #     model = runTwoLayerCNN(num_classes)
+    #     print("Running two layer CNN")
     
-    optimizer = optim.SGD(model.parameters(), lr=learning_rate)
-    pytorch_utils.train(model, optimizer, loader_train, loader_val, num_epochs)
+    # if the user specifies what learning rate to use, then we only consider that one
+    # and increase the number of epochs for it
+    if len(sys.argv) == 4:
+        learning_rates = [float(sys.argv[3])]
+        num_epochs = 10
+
+    best_acc = 0
+    best_learning_rate = None
+    for learning_rate in learning_rates:
+        print("Testing out learning rate: ", learning_rate)
+        optimizer = optim.SGD(model.parameters(), lr=learning_rate)
+        acc = pytorch_utils.train(model, optimizer, loader_train, loader_val, num_epochs)
+        print("Accuracy was: ", 100*acc)
+        if acc > best_acc:
+            best_acc = acc
+            best_learning_rate = learning_rate
+    print("Best accuracy and learning rates are: ", best_acc, best_learning_rate)
 
 if __name__ == '__main__':
   main()
