@@ -60,9 +60,9 @@ def runTwoLayerCNN(num_classes):
 def main():
     batch_size = 200
     hidden_layer_size = 5000
-    learning_rates = [0.0000001,0.000001,0.00001,0.0001]
+    learning_rates = [0.0000001,0.00001, 0.001, 0.1]
     training_portion = 0.8
-    num_epochs = 5
+    num_epochs = 4
 
     directory = sys.argv[1]
     X, Y = utils.load_data(directory)
