@@ -60,7 +60,7 @@ def runTwoLayerCNN(num_classes):
 def main():
     batch_size = 200
     hidden_layer_size = 5000
-    learning_rates = [0.001, 0.01, 0.1, 1, 10, 100]
+    learning_rates = [0.0000001,0.000001,0.00001,0.0001]
     training_portion = 0.8
     num_epochs = 5
 
@@ -106,7 +106,7 @@ def main():
             best_acc = acc
             best_learning_rate = learning_rate
             best_model = model
-    print("Best accuracy and learning rates are: ", best_acc, best_learning_rate)
+    print("Best accuracy and learning rates are: ", 100*best_acc, best_learning_rate)
     print("Running the best model for 10 more epochs")
     optimizer = optim.SGD(best_model.parameters(), lr=best_learning_rate)
     acc = pytorch_utils.train(best_model, optimizer, loader_train, loader_val, 10)

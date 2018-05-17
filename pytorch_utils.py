@@ -74,8 +74,9 @@ def train(model, optimizer, loader_train, loader_val, epochs=1):
             if t % print_every == 0:
                 print('Iteration %d, loss = %.4f' % (t, loss.item()))
                 # check_accuracy(loader_val, model)
-                print()
-    return check_accuracy(loader_val, model)
+    acc = check_accuracy(loader_val, model)
+    print('Accuracy %d' % (acc))
+    return acc
 
 def check_accuracy(loader, model):
     # if loader.dataset.train:
