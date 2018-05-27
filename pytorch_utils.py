@@ -36,6 +36,8 @@ def random_weight(shape):
     w.requires_grad = True
     return w
 
+def hi():
+    print ("HIIIfdsfdsI")
 
 def train(model, optimizer, loader_train, loader_val, epochs=1):
     """
@@ -47,7 +49,10 @@ def train(model, optimizer, loader_train, loader_val, epochs=1):
     Returns: Nothing, but prints model accuracies during training.
     """
     model = model.to(device=device)  # move the model parameters to CPU/GPU
+    
     for e in range(epochs):
+        print ('epoch', e)
+        
         num_iters = len(loader_train)
         want_print = 1
         print_every = num_iters / want_print
@@ -72,10 +77,17 @@ def train(model, optimizer, loader_train, loader_val, epochs=1):
             optimizer.step()
 
             if t % print_every == 0:
-                print('Iteration %d, loss = %.4f' % (t, loss.item()))
+                print(' Iteration %d, loss = %.4f' % (t, loss.item()))
                 # check_accuracy(loader_val, model)
-    acc = check_accuracy(loader_val, model)
-    print('Accuracy %d' % (acc))
+          
+        # also prints the acc, at end of epoch
+        acc = check_accuracy(loader_val, model)
+        print (' ')
+        #print('epoch', e, 'accuracy %d' % (acc))
+    
+    # get train acc
+    check_accuracy(loader_train, model)
+    
     return acc
 
 def check_accuracy(loader, model):
@@ -87,13 +99,14 @@ def check_accuracy(loader, model):
     num_samples = 0
     model.eval()  # set model to evaluation mode
     with torch.no_grad():
-        for t, (x, y)in enumerate(loader):
+        for t, (x, y) in enumerate(loader):
             x = x.to(device=device, dtype=dtype)  # move to device, e.g. GPU
             y = y.to(device=device, dtype=torch.long)
             scores = model(x)
             _, preds = scores.max(1)
             num_correct += (preds == y).sum()
             num_samples += preds.size(0)
+
         acc = float(num_correct) / num_samples
         print('Got %d / %d correct (%.2f)' % (num_correct, num_samples, 100 * acc))
         return acc
