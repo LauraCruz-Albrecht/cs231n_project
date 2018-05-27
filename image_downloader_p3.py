@@ -54,7 +54,7 @@ def download_image(key_url):
     # filename = os.path.join(out_dir, '{}_{}.jpg'.format(key, label))
 
     # modified data
-    (key, url, old_label, new_label) = key_url
+    (key, url, orig_label, new_label) = key_url
     filename = os.path.join(out_dir, '{}_{}.jpg'.format(key, new_label))
 
     if os.path.exists(filename):

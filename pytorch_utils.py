@@ -14,9 +14,6 @@ if USE_GPU and torch.cuda.is_available():
 else:
     device = torch.device('cpu')
 
-# Constant to control how frequently we print train loss
-print_every = 5
-
 print('using device:', device)
 
 
@@ -51,6 +48,9 @@ def train(model, optimizer, loader_train, loader_val, epochs=1):
     """
     model = model.to(device=device)  # move the model parameters to CPU/GPU
     for e in range(epochs):
+        num_iters = len(loader_train)
+        want_print = 1
+        print_every = num_iters / want_print
         for t, (x, y) in enumerate(loader_train):
             model.train()  # put model to training mode
             x = x.to(device=device, dtype=dtype)  # move to device, e.g. GPU
@@ -73,8 +73,10 @@ def train(model, optimizer, loader_train, loader_val, epochs=1):
 
             if t % print_every == 0:
                 print('Iteration %d, loss = %.4f' % (t, loss.item()))
-                check_accuracy(loader_val, model)
-                print()
+                # check_accuracy(loader_val, model)
+    acc = check_accuracy(loader_val, model)
+    print('Accuracy %d' % (acc))
+    return acc
 
 def check_accuracy(loader, model):
     # if loader.dataset.train:
@@ -94,6 +96,7 @@ def check_accuracy(loader, model):
             num_samples += preds.size(0)
         acc = float(num_correct) / num_samples
         print('Got %d / %d correct (%.2f)' % (num_correct, num_samples, 100 * acc))
+        return acc
 
 
 # Convolutional layer with channel_1 5x5 filters with zero-padding of 2
@@ -101,7 +104,7 @@ def check_accuracy(loader, model):
 # Fully-connected layer to num_classes classes
 class TwoLayerConvNet(nn.Module):
     def __init__(self, in_channel, channel_1, num_classes, filter_size, zero_padding):
-        super().__init__()
+        super(TwoLayerConvNet, self).__init__()
         self.conv_w1 = nn.Conv2d(in_channel, channel_1, filter_size, 1, (zero_padding,zero_padding))
         nn.init.kaiming_normal_(self.conv_w1.weight)
         self.fc1 = nn.Linear(channel_1*IMG_SZ*IMG_SZ, num_classes)
@@ -116,7 +119,7 @@ class TwoLayerConvNet(nn.Module):
 
 class TwoLayerFC(nn.Module):
     def __init__(self, input_size, hidden_size, num_classes):
-        super().__init__()
+        super(TwoLayerFC, self).__init__()
         # assign layer objects to class attributes
         self.fc1 = nn.Linear(input_size, hidden_size)
         # nn.init package contains convenient initialization methods

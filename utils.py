@@ -6,16 +6,9 @@ from PIL import Image
 import numpy as np
 from time import time
 from time import sleep
-from scipy import ndimage
-from matplotlib import pyplot as plt
-from skimage import data, color
-from skimage.transform import rescale, resize, downscale_local_mean
-import scipy
-import pickle
-import gzip
 
 # global variables
-IMG_SZ = 576    # width, height of resized image square
+IMG_SZ = 256    # width, height of resized image square
 
 def load_image(infilename):
     '''
@@ -45,24 +38,31 @@ def crop_image(img_arr):
     return img_arr
 
 def load_data(src_folder):
-    X, Y = [], []
-
     src_files = [f for f in os.listdir(src_folder) if os.path.isfile(os.path.join(src_folder, f)) and f != '.DS_Store']
 
-    N = len(src_files)
+    # can't do over 50k files because of google cloud memory restrictions
+    estimated_N = len(src_files)
+    if len(src_files) > 50000:
+        estimated_N = 20000
 
-    for i in range(N):
+    X, Y = np.empty([estimated_N, IMG_SZ, IMG_SZ, 3]), np.empty([estimated_N])
+
+    position = 0
+    for i in range(len(src_files)):
         _file = src_files[i]
         x = load_image(src_folder + '/' + _file)  # numpy array [IMG_SZ x IMG_SZ x 3]
         y = _file[_file.index('_') + 1 : _file.index('.')]  # filename format: [id_label.jpg]
         
-        X.append(x)
-        Y.append(y)
+        if int(y) >= 100: continue
 
-        if i % 100 == 0: print ('i', i)
+        X[position] = x
+        Y[position] = y
+        position = position + 1
 
-    X = np.array(X)
-    Y = np.array(Y)
+        if i % (1000) == 0: print ('i', i)
+        
+    X = X[:position]
+    Y = Y[:position]
     return X, Y
 
 

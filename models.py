@@ -7,6 +7,7 @@ import torch.optim as optim
 import torch.utils.data as DataLoader
 from torch.utils.data.sampler import SubsetRandomSampler
 import numpy as np
+import sys
 
 IMG_SZ = 256
 
@@ -52,23 +53,24 @@ def runTwoLayerCNN(num_classes):
     num_channels = 10
     return pytorch_utils.TwoLayerConvNet(3, num_channels, num_classes, 5, 2)
 
+# way to run
+# python models.py directory-for-data model-to-run learning-rate
+# model-to-run can be 2cnn, fc, or none
+# learning-rate is optional: if it is not given, then we test out many different learning rates with a low epoch
 def main():
-    batch_size = 64
-    num_classes = 500
-    hidden_layer_size = 1000
-    learning_rate = 1e-2
+    batch_size = 200
+    hidden_layer_size = 5000
+    learning_rates = [0.0000001,0.00001, 0.001, 0.1]
     training_portion = 0.8
-    num_epochs = 10
+    num_epochs = 4
 
-    X, Y = utils.load_data('mini_data/compressed_256')
-    X = X.astype(int)
-    Y = Y.astype(int)
+    directory = sys.argv[1]
+    X, Y = utils.load_data(directory)
     N = X.shape[0]
 
     # previously, X is: N x 256 x 256 x 3 ; make channels second
     X = np.transpose(X, (0, 3, 1, 2))  # N x 3 x 256 x 256
-    X, Y, num_classes = convertLabelsToClasses(X, Y, N, num_classes)
-    N = X.shape[0] # need this line because X may have changed in size
+    num_classes = len(set(Y))
     num_train = int(N * training_portion)
 
     loader_train, loader_val = loadData(X, Y, num_train, N, batch_size)
@@ -76,13 +78,39 @@ def main():
     print("Num classes is ", num_classes)
     print("Num samples being cosidered in training is ", num_train)
     print("Num samples in val is ", N - num_train)
+    print("hidden_layer_size is ", hidden_layer_size)
+    print("batch_size is ", batch_size)
 
-    # change this line to try out different models
-    model = runTwoLayerCNN(num_classes)
-    # model = runFC(hidden_layer_size, num_classes)
-    
-    optimizer = optim.SGD(model.parameters(), lr=learning_rate)
-    pytorch_utils.train(model, optimizer, loader_train, loader_val, num_epochs)
+    # if the user specifies what learning rate to use, then we only consider that one
+    # and increase the number of epochs for it
+    if len(sys.argv) == 4:
+        learning_rates = [float(sys.argv[3])]
+        num_epochs = 10
+
+    best_acc = 0
+    best_learning_rate = None
+    best_model = None
+    for learning_rate in learning_rates:
+        model = None
+        if sys.argv[2] == "2cnn":
+            model = runTwoLayerCNN(num_classes)
+            print("Running two layer CNN")
+        else:
+            model = runFC(hidden_layer_size, num_classes)
+            print("Running fully connected layer")
+        print("Testing out learning rate: ", learning_rate)
+        optimizer = optim.SGD(model.parameters(), lr=learning_rate)
+        acc = pytorch_utils.train(model, optimizer, loader_train, loader_val, num_epochs)
+        print("Accuracy was: ", 100*acc)
+        if acc > best_acc:
+            best_acc = acc
+            best_learning_rate = learning_rate
+            best_model = model
+    print("Best accuracy and learning rates are: ", 100*best_acc, best_learning_rate)
+    print("Running the best model for 10 more epochs")
+    optimizer = optim.SGD(best_model.parameters(), lr=best_learning_rate)
+    acc = pytorch_utils.train(best_model, optimizer, loader_train, loader_val, 10)
+    print("Final accuracy is ", acc)
 
 if __name__ == '__main__':
   main()
