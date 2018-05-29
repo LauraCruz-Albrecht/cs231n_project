@@ -20,7 +20,7 @@ from io import BytesIO
 import numpy as np
 import scipy.misc
 
-IMG_SZ = 256  # width, height of resized image square
+IMG_SZ = 224  # width, height of resized image square
 
 def crop_image(img_arr):
     '''

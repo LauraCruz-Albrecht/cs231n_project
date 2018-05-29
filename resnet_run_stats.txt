@@ -1,0 +1,221 @@
+Resnet run stats
+----------------
+
+First run: train/val = 7944 images
+x (7944, 3, 224, 224)
+
+num_classes 50
+num_train: 6355, num_test: 1589 (80/20 split)
+
+epoch 0
+iter 0 / 32
+ Iteration 0, loss = 3.9326
+validation accuracy
+Got 35 / 1589 correct (2.20)
+train accuracy
+Got 122 / 6355 correct (1.92)
+iter 1 / 32
+iter 2 / 32
+iter 3 / 32
+iter 4 / 32
+iter 5 / 32
+ Iteration 5, loss = 3.9232
+validation accuracy
+Got 49 / 1589 correct (3.08)
+train accuracy
+Got 195 / 6355 correct (3.07)
+iter 6 / 32
+iter 7 / 32
+iter 8 / 32
+iter 9 / 32
+iter 10 / 32
+ Iteration 10, loss = 3.8822
+validation accuracy
+Got 61 / 1589 correct (3.84)
+train accuracy
+Got 255 / 6355 correct (4.01)
+iter 11 / 32
+iter 12 / 32
+iter 13 / 32
+iter 14 / 32
+iter 15 / 32
+ Iteration 15, loss = 3.7880
+validation accuracy
+Got 136 / 1589 correct (8.56)
+train accuracy
+Got 573 / 6355 correct (9.02)
+iter 16 / 32
+iter 17 / 32
+iter 18 / 32
+iter 19 / 32
+iter 20 / 32
+ Iteration 20, loss = 3.7430
+validation accuracy
+Got 234 / 1589 correct (14.73)
+train accuracy
+Got 1027 / 6355 correct (16.16)
+iter 21 / 32
+iter 22 / 32
+iter 23 / 32
+iter 24 / 32
+iter 25 / 32
+ Iteration 25, loss = 3.6523
+validation accuracy
+Got 338 / 1589 correct (21.27)
+train accuracy
+Got 1512 / 6355 correct (23.79)
+iter 26 / 32
+iter 27 / 32
+iter 28 / 32
+iter 29 / 32
+iter 30 / 32
+ Iteration 30, loss = 3.6013
+validation accuracy
+Got 459 / 1589 correct (28.89)
+train accuracy
+Got 2048 / 6355 correct (32.23)
+iter 31 / 32
+validation accuracy
+Got 491 / 1589 correct (30.90)
+train accuracy
+Got 2154 / 6355 correct (33.89)
+
+
+RUN 2
+------
+load_data returning X (11916, 224, 224, 3)
+x (11916, 3, 224, 224)
+y [ 8.  9. 19. 35. 30.]
+num_classes 50
+num_train 9532
+
+
+epoch 0
+iter 0 / 96
+ Iteration 0, loss = 3.9331
+validation accuracy
+Got 27 / 2384 correct (1.13)
+iter 1 / 96
+iter 2 / 96
+iter 3 / 96
+iter 4 / 96
+iter 5 / 96
+ Iteration 5, loss = 3.9952
+iter 6 / 96
+iter 7 / 96
+iter 8 / 96
+iter 9 / 96
+iter 10 / 96
+ Iteration 10, loss = 3.9624
+iter 11 / 96
+iter 12 / 96
+iter 13 / 96
+iter 14 / 96
+iter 15 / 96
+ Iteration 15, loss = 3.8339
+iter 16 / 96
+iter 17 / 96
+iter 18 / 96
+iter 19 / 96
+iter 20 / 96
+ Iteration 20, loss = 3.7664
+iter 21 / 96
+iter 22 / 96
+iter 23 / 96
+iter 24 / 96
+iter 25 / 96
+ Iteration 25, loss = 3.6666
+validation accuracy
+Got 427 / 2384 correct (17.91)
+iter 26 / 96
+iter 27 / 96
+iter 28 / 96
+iter 29 / 96
+iter 30 / 96
+ Iteration 30, loss = 3.6654
+iter 31 / 96
+iter 32 / 96
+iter 33 / 96
+iter 34 / 96
+iter 35 / 96
+ Iteration 35, loss = 3.6334
+iter 36 / 96
+iter 37 / 96
+iter 38 / 96
+iter 39 / 96
+iter 40 / 96
+ Iteration 40, loss = 3.5172
+iter 41 / 96
+iter 42 / 96
+iter 43 / 96
+iter 44 / 96
+iter 45 / 96
+ Iteration 45, loss = 3.4026
+iter 46 / 96
+iter 47 / 96
+iter 48 / 96
+iter 49 / 96
+iter 50 / 96
+ Iteration 50, loss = 3.2656
+validation accuracy
+Got 1130 / 2384 correct (47.40)
+iter 51 / 96
+iter 52 / 96
+iter 53 / 96
+iter 54 / 96
+iter 55 / 96
+ Iteration 55, loss = 3.2380
+iter 56 / 96
+iter 57 / 96
+iter 58 / 96
+iter 59 / 96
+iter 60 / 96
+ Iteration 60, loss = 3.1580
+iter 61 / 96
+iter 62 / 96
+iter 63 / 96
+iter 64 / 96
+iter 65 / 96
+ Iteration 65, loss = 3.0576
+iter 66 / 96
+iter 67 / 96
+iter 68 / 96
+iter 69 / 96
+iter 70 / 96
+ Iteration 70, loss = 2.8926
+iter 71 / 96
+iter 72 / 96
+iter 73 / 96
+iter 74 / 96
+iter 75 / 96
+ Iteration 75, loss = 2.7907
+validation accuracy
+Got 1471 / 2384 correct (61.70)
+iter 76 / 96
+iter 77 / 96
+iter 78 / 96
+iter 79 / 96
+iter 80 / 96
+ Iteration 80, loss = 2.6947
+iter 81 / 96
+iter 82 / 96
+iter 83 / 96
+iter 84 / 96
+iter 85 / 96
+ Iteration 85, loss = 2.6874
+iter 86 / 96
+iter 87 / 96
+iter 88 / 96
+iter 89 / 96
+iter 90 / 96
+ Iteration 90, loss = 2.4801
+iter 91 / 96
+iter 92 / 96
+iter 93 / 96
+iter 94 / 96
+iter 95 / 96
+ Iteration 95, loss = 2.6415
+validation accuracy
+Got 1673 / 2384 correct (70.18)
+train accuracy
+Got 6781 / 9532 correct (71.14)
