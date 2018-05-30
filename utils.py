@@ -17,7 +17,7 @@ def load_image(infilename):
     '''
     img = Image.open(infilename)
     img.load()
-    data = np.asarray( img, dtype="int32" )
+    data = np.asarray( img, dtype="int32" ) # should this be 'uint8' ??
     return data
 
 def crop_image(img_arr):
